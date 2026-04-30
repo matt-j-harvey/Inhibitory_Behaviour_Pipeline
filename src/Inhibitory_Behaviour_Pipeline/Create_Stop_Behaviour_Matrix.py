@@ -2,7 +2,7 @@ import numpy as np
 import os
 from tqdm import tqdm
 
-import Behaviour_Analysis_Utils
+from Inhibitory_Behaviour_Pipeline.Behaviour_Analysis_Utils import Behaviour_Analysis_Utils
 
 
 

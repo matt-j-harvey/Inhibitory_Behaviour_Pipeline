@@ -64,7 +64,7 @@ def behaviour_analysis_pipeline(base_directory):
 
 
 
-flat_session_list = [r"Cohort 4\BRAC12136.4a_White\2026_04_29"]
+flat_session_list = [r"Cohort 4\BRAC12136.4b_Pink\2026_04_29"]
 data_root = r"C:\Users\matth\Dropbox\Behaviour_Data"
 
 # Set Lick Thresholds

@@ -11,7 +11,7 @@ from tqdm import tqdm
 import tables
 import sys
 
-import Behaviour_Analysis_Utils
+from Inhibitory_Behaviour_Pipeline.Behaviour_Analysis_Utils import Behaviour_Analysis_Utils
 
 
 class lick_threshold_window(QWidget):
