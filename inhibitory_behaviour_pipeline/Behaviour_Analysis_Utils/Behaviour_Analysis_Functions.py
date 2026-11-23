@@ -114,10 +114,8 @@ def calculate_d_prime(hits, misses, false_alarms, correct_rejections):
 
 
 
-def get_static_v_drift_d_prime(base_directory):
+def get_static_v_drift_d_prime(base_directory, behaviour_matrix):
 
-    # Load Behaviour Matrix
-    behaviour_matrix = np.load(os.path.join(base_directory, "Behaviour_Matrix.npy"), allow_pickle=True)
 
     # Drift Hits - Drift Misses
     # Static CRs - Static FAs
@@ -133,15 +131,18 @@ def get_static_v_drift_d_prime(base_directory):
     static_crs = n_delay_hits + n_delay_misses
     static_fas = n_delay_fas
 
+    print("drift_hits", drift_hits)
+    print("drift_misses", drift_misses)
+    print("static_fas", static_fas)
+    print("static_crs", static_crs)
+
     combined_d_prime = calculate_d_prime(drift_hits, drift_misses, static_fas, static_crs)
+    print("combined_d_prime", combined_d_prime)
 
     return combined_d_prime
 
 
-def get_tone_v_no_tone_d_prime(base_directory):
-
-    # Load Behaviour Matrix
-    behaviour_matrix = np.load(os.path.join(base_directory, "Behaviour_Matrix.npy"), allow_pickle=True)
+def get_tone_v_no_tone_d_prime(behaviour_matrix):
 
     # Drift Hits - Drift Misses
     # Static CRs - Static FAs
@@ -162,7 +163,7 @@ def get_tone_v_no_tone_d_prime(base_directory):
     return combined_d_prime
 
 
-def get_stop_d_prime(base_directory):
+def get_stop_d_prime(behaviour_matrix):
 
     """
     d’ = z(FA) – z(H)
@@ -176,8 +177,6 @@ def get_stop_d_prime(base_directory):
 
     """
 
-    # Load Behaviour Matrix
-    behaviour_matrix = np.load(os.path.join(base_directory, "Behaviour_Matrix.npy"))
 
     # Get Trial Indicies
     delay_trial_indicies = np.where(behaviour_matrix[:, 1] == 1)[0]
@@ -278,9 +277,6 @@ def get_performance(base_directory, behaviour_matrix):
     # Set Save Directory
     save_directory = os.path.join(base_directory, "Behaviour_Analysis")
 
-    # Load Behaviour Matrix
-    #behaviour_matrix = np.load(os.path.join(base_directory, "Behaviour_Matrix.npy"))
-
     # Get Trial Indicies
     go_trial_indicies = np.where(behaviour_matrix[:, 1] == 0)[0]
     delay_trial_indicies = np.where(behaviour_matrix[:, 1] == 1)[0]
@@ -297,7 +293,7 @@ def get_performance(base_directory, behaviour_matrix):
     # Get Delay Trial Performance
     if len(delay_trial_indicies) > 0:
         delay_trial_hit_percentage, delay_trial_miss_percentage, delay_trial_fa_percentage = calculate_delay_trial_performance(behaviour_matrix, delay_trial_indicies)
-        static_drift_d_prime = get_static_v_drift_d_prime(base_directory)
+        static_drift_d_prime = get_static_v_drift_d_prime(base_directory, behaviour_matrix)
         np.save(os.path.join(save_directory, "delay_trial_hit_percentage.npy"), delay_trial_hit_percentage)
         np.save(os.path.join(save_directory, "delay_trial_miss_percentage.npy"), delay_trial_miss_percentage)
         np.save(os.path.join(save_directory, "delay_trial_fa_percentage.npy"), delay_trial_fa_percentage)
@@ -309,7 +305,7 @@ def get_performance(base_directory, behaviour_matrix):
     # Get Stop Trial Performance
     if len(stop_trial_indicies) > 0:
         stop_trial_correct_reject_percentage, stop_trial_false_alarm_percentage = calculate_stop_performance(behaviour_matrix, stop_trial_indicies)
-        tone_d_prime = get_tone_v_no_tone_d_prime(base_directory)
+        tone_d_prime = get_tone_v_no_tone_d_prime(behaviour_matrix)
         np.save(os.path.join(save_directory, "stop_trial_correct_reject_percentage.npy"), stop_trial_correct_reject_percentage)
         np.save(os.path.join(save_directory, "stop_trial_false_alarm_percentage.npy"), stop_trial_false_alarm_percentage)
         np.save(os.path.join(save_directory, "tone_d_prime.npy"), tone_d_prime)
@@ -459,10 +455,7 @@ def get_hit_reaction_times(behaviour_matrix):
     else:
         return None
 
-def get_delay_reaction_times(base_directory):
-
-    # Load Behaviour Matrix
-    behaviour_matrix = np.load(os.path.join(base_directory, "Behaviour_Matrix.npy"))
+def get_delay_reaction_times(behaviour_matrix):
 
     # Get Hit Trials
     hit_trial_indicies = get_hit_trials(behaviour_matrix)
@@ -505,10 +498,7 @@ def get_correct_delay_reaction_times(behaviour_matrix, post_drift=True):
 
 
 
-def correlate_delay_duration_and_rt(base_directory):
-
-    # Load Behaviour Matrix
-    behaviour_matrix = np.load(os.path.join(base_directory, "Behaviour_Matrix.npy"))
+def correlate_delay_duration_and_rt(behaviour_matrix):
 
     # Get Correct Delay Trials
     delay_duration_list = []
@@ -590,7 +580,7 @@ def filter_trials_by_reaction_window(behaviour_martrix, trial_index_list, window
 
 
 
-def get_performance_by_bin(base_directory, bin_width=250):
+def get_performance_by_bin(behaviour_matrix, bin_width=250):
 
     """
     For Each Bin -
@@ -601,9 +591,6 @@ def get_performance_by_bin(base_directory, bin_width=250):
     Go Trials
     what percentage have an RT < bi n end
     """
-
-    # Load Behaviour Matrix
-    behaviour_matrix = np.load(os.path.join(base_directory, "Behaviour_Matrix.npy"))
 
     # Get Go Trials
     go_trial_indicies = np.where(behaviour_matrix[:, 1]==0)[0]
@@ -672,10 +659,7 @@ def get_correct_delay_distribution(behaviour_matrix):
         return None
 
 
-def get_false_alarm_distribution(base_directory):
-
-    # Load Behaviour Matrix
-    behaviour_matrix = np.load(os.path.join(base_directory, "Behaviour_Matrix.npy"))
+def get_false_alarm_distribution(behaviour_matrix):
 
     # Get Incorrect delay Trials
     false_alarm_trials = get_false_alarm_delay_trials(behaviour_matrix)

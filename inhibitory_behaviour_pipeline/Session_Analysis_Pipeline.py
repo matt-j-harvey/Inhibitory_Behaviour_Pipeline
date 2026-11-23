@@ -91,4 +91,11 @@ def behaviour_analysis_pipeline(data_root, session, output_root):
     Behaviour_Plotting_Functions.overlay_rt_distributions_density(base_directory, hit_trial_rts, correct_delay_distribution, title="Hit v Succsesfull Wait Times")
     """
 
+"""
+# Set Data Directories
+session = r"Z:Cohort_6\BRAC13223.4e_Blue\2026_11_20"
+data_root = r"Z:\home\shared\harveym\Behaviour_Data"
+output_root = r"Z:\home\shared\harveym\Analysed_Data"
 
+behaviour_analysis_pipeline(data_root, session, output_root)
+"""
